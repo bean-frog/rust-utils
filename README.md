@@ -1,5 +1,10 @@
 # rust-utils
 small utilities written in Rust
+- build instructions (applies to all, unless stated)
+	- clone this repo
+	- cd to whichever directory
+	- `cargo build`
+	- optionally `sudo mv ./target/debug/<filename> /bin/<filename>` to make it globally accessible
 
 ## cfgedit
 - create some aliases for config files that can be opened with short commands
