@@ -19,7 +19,18 @@ small utilities written in Rust
 - create reminders and display them as dunst notifications
 - stored in ~/.config/rust-utils/reminders.json
 - Usage:
-	- `notify add "notification text" <low|med|high>` adds a notification
-	- `notify view` displays all notifications
-	- `notify delete <n>` deletes the nth notification with confirmation (starting from 1)
-	- `notify notify` fires all notifications with dunst. I have this tied to the unlock_cmd in my hypridle config.
+	- `notify <add|create|a|c> "notification text" <low|med|high>` adds a notification
+	- `notify <view|show|v|s>` displays all notifications
+	- `notify <delete|remove|d|r> <n>` deletes the nth notification with confirmation (starting from 1)
+	- `notify <notify|n>` fires all notifications with dunst. I have this tied to the unlock_cmd in my hypridle config.
+## astrocalc
+- some astronomical calculations
+- Usage:
+	- `astrocalc distance isdeg showwork alpha1 delta1 alpha2 delta2` - calculates approximate angular separation (deg and rad) and distance (arcseconds) between 2 Ra/Dec points.
+		- isdeg: boolean, true = alpha/delta values are in degrees, false = radians
+		- showwork: boolean, true = display the steps to calculate, false = shut up and just give me the answer
+		- alpha 1/2: float, the Right Ascension (Ra) of each coordinate
+		- delta 1/2: float, the Declination (Dec) of each coordinate
+
+	- `astrocalc convert <rad-deg|deg-rad> input` - converts some values
+		- input can be a float, int, or string. The substring 'pi' will be evaluated as pi. for example, `180, 2pi, 180.0 are all acceptable inputs.
