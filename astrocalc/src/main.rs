@@ -1,25 +1,25 @@
 use clap::{Arg, Command};
 const PI:f32 = std::f32::consts::PI;
 use unicode_width::UnicodeWidthStr;
-use regex::{Match, Regex};
+use regex::Regex;
 
 fn strip_ansi(s: &str) -> String {
-    let ansi_regex = Regex::new(r"\x1b\[[0-9;]*m").unwrap();
+    let ansi_regex: Regex = Regex::new(r"\x1b\[[0-9;]*m").unwrap();
     ansi_regex.replace_all(s, "").to_string()
 }
 
 fn gen_box(lines: &[String]) -> String {
-    let max_width = lines.iter()
-        .map(|s| UnicodeWidthStr::width(strip_ansi(s).as_str()))
+    let max_width: usize = lines.iter()
+        .map(|s: &String| UnicodeWidthStr::width(strip_ansi(s).as_str()))
         .max()
         .unwrap_or(0);
 
-    let mut output = String::new();
+    let mut output: String = String::new();
     output.push_str(&format!("┏{}┓\n", "━".repeat(max_width)));
 
     for line in lines {
-        let visible_width = UnicodeWidthStr::width(strip_ansi(line).as_str());
-        let padding = max_width - visible_width;
+        let visible_width: usize = UnicodeWidthStr::width(strip_ansi(line).as_str());
+        let padding: usize = max_width - visible_width;
         output.push_str(&format!("┃{}{}┃\n", line, " ".repeat(padding)));
     }
 
@@ -36,10 +36,10 @@ fn calc_distance(isdeg:String, showwork:String, a1:f32, d1:f32, a2:f32, d2:f32) 
             }
         };
     }
-    let mut a1 = a1;
-    let mut d1 = d1;
-    let mut a2 = a2;
-    let mut d2 = d2;
+    let mut a1: f32 = a1;
+    let mut d1: f32 = d1;
+    let mut a2: f32 = a2;
+    let mut d2: f32 = d2;
     verbose!("α₁ = {}", a1);
     verbose!("δ₁ = {}", d1);
     verbose!("α₂ = {}", a2);
@@ -75,11 +75,11 @@ fn calc_distance(isdeg:String, showwork:String, a1:f32, d1:f32, a2:f32, d2:f32) 
     // Convert to degrees, arcminutes, arcseconds
     verbose!("Convert θ to degrees, arcminutes, and arcseconds");
     verbose!("θ° = θ * 180/π");
-    let theta_deg = theta * (180.0 / PI);
+    let theta_deg: f32 = theta * (180.0 / PI);
     verbose!("\tθ° = {} * 180/π = \x1b[1m\x1b[37m{}\x1b[0m°", theta, theta_deg);
     
-    let theta_arcmin = (theta_deg - theta_deg.floor()) * 60.0;
-    let theta_arcsec = (theta_arcmin - theta_arcmin.floor()) * 60.0;
+    let theta_arcmin: f32 = (theta_deg - theta_deg.floor()) * 60.0;
+    let theta_arcsec: f32 = (theta_arcmin - theta_arcmin.floor()) * 60.0;
     
     verbose!("Calculate arcminutes and arcseconds");
     verbose!("θ' = (θ° - floor(θ°)) * 60");
@@ -87,9 +87,9 @@ fn calc_distance(isdeg:String, showwork:String, a1:f32, d1:f32, a2:f32, d2:f32) 
     
     verbose!("θ\" = (θ' - floor(θ')) * 60");
     verbose!("\tθ\" = ({} - floor({})) * 60 = \x1b[1m\x1b[37m{}\x1b[0m", theta_arcmin, theta_arcmin, theta_arcsec);
-    let theta_output_rad = format!("θ = \x1b[1m\x1b[37m{}\x1b[0m rad", theta);
+    let theta_output_rad: String = format!("θ = \x1b[1m\x1b[37m{}\x1b[0m rad", theta);
 
-let theta_output_deg = format!(
+let theta_output_deg: String = format!(
     "θ = \x1b[1m\x1b[37m{}°{}′{}″\x1b[0m",
     theta_deg.floor(),
     theta_arcmin.floor(),
@@ -104,21 +104,21 @@ let theta_output_deg = format!(
 fn convert(conversion: String, input: String) {
     if conversion == "deg-rad" {
         let deg: f32 = input.trim().parse().expect("Invalid degree value");
-        let coeff = deg / 180.0;
+        let coeff: f32 = deg / 180.0;
         print!("{}",gen_box(&[format!("{}π rad", coeff)]));
     } else if conversion == "rad-deg" {
         if input.contains("pi") {
-            let coeff_str = input.replace("pi", "").trim().to_string();
+            let coeff_str: String = input.replace("pi", "").trim().to_string();
             let coeff: f32 = if coeff_str.is_empty() {
                 1.0
             } else {
                 coeff_str.parse().expect("Invalid coefficient for pi")
             };
-            let deg = coeff * 180.0;
+            let deg: f32 = coeff * 180.0;
             print!("{}",gen_box(&[format!("{}°", deg)]));
         } else {
             let rad: f32 = input.trim().parse().expect("Invalid radian value");
-            let deg = rad * 180.0 / PI;
+            let deg: f32 = rad * 180.0 / PI;
             print!("{}",gen_box(&[format!("{}°", deg)]));
         }
     } else {
@@ -127,7 +127,7 @@ fn convert(conversion: String, input: String) {
 }
 
 fn main() {
-    let matches = Command::new("Astrocalc")
+    let matches: clap::ArgMatches = Command::new("astrocalc")
         .version("1.0")
         .author("beanfrog")
         .about("perform astronomical calculations and conversions")
@@ -189,17 +189,17 @@ fn main() {
 
     match matches.subcommand() {
         Some(("distance", args)) => {
-            let isdeg = args.get_one::<String>("isdeg").unwrap();
-            let showwork = args.get_one::<String>("showwork").unwrap();
-            let alpha1 = args.get_one::<f32>("alpha1").unwrap();
-            let delta1 = args.get_one::<f32>("delta1").unwrap();
-            let alpha2 = args.get_one::<f32>("alpha2").unwrap();
-            let delta2 = args.get_one::<f32>("delta2").unwrap();
+            let isdeg: &String = args.get_one::<String>("isdeg").unwrap();
+            let showwork: &String = args.get_one::<String>("showwork").unwrap();
+            let alpha1: &f32 = args.get_one::<f32>("alpha1").unwrap();
+            let delta1: &f32 = args.get_one::<f32>("delta1").unwrap();
+            let alpha2: &f32 = args.get_one::<f32>("alpha2").unwrap();
+            let delta2: &f32 = args.get_one::<f32>("delta2").unwrap();
             calc_distance(isdeg.clone(),showwork.clone(), *alpha1, *delta1, *alpha2, *delta2)
         }
         Some (("convert", args)) => {
-            let conversion = args.get_one::<String>("conversion").unwrap();
-            let input = args.get_one::<String>("input").unwrap();
+            let conversion: &String = args.get_one::<String>("conversion").unwrap();
+            let input: &String = args.get_one::<String>("input").unwrap();
             convert(conversion.clone(), input.clone());
         }
         _ => println!("No subcommand was used."),

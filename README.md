@@ -34,3 +34,10 @@ small utilities written in Rust
 
 	- `astrocalc convert <rad-deg|deg-rad> input` - converts some values
 		- input can be a float, int, or string. The substring 'pi' will be evaluated as pi. for example, `180, 2pi, 180.0 are all acceptable inputs.
+
+## chatgpt
+- access the chatgpt API from the command line
+- Usage:
+	- `chatgpt setkey <apikey>` - WARNING: this puts your api key under ~/.config/rust-utils/key 
+	- `chatgpt <model> input`
+	- if no model provided, default is gpt-3.5

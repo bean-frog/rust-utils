@@ -1,0 +1,15 @@
+[package]
+name = "chatgpt"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.40"
+clap = "4.5.32"
+regex = "1.11.1"
+reqwest = { version = "0.12.15", features = ["json"] }
+serde = "1.0.219"
+serde_derive = "1.0.219"
+serde_json = "1.0.140"
+tokio = { version = "1.44.1", features = ["full"] }
+unicode-width = "0.2.0"
