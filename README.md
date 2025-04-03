@@ -39,5 +39,6 @@ small utilities written in Rust
 - access the chatgpt API from the command line
 - Usage:
 	- `chatgpt setkey <apikey>` - WARNING: this puts your api key under ~/.config/rust-utils/key 
-	- `chatgpt <model> input`
-	- if no model provided, default is gpt-3.5
+	- `chatgpt model <model>`
+		- if no model provided, default is gpt-3.5-turbo
+	- `chatgpt <query>`
